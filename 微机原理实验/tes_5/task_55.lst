@@ -1,0 +1,187 @@
+A51 MACRO ASSEMBLER  TASK_55                                                              05/01/2020 14:19:42 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.07
+OBJECT MODULE PLACED IN ..\实验55\task_55.obj
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE ..\实验55\task_55.asm SET(SMALL) DEBUG PRINT(.\task_55.lst) OBJECT(..\实验
+                      55\task_55.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     org 0000h
+0000 802E              2     sjmp main
+0003                   3     org 0003h
+0003 0200CB            4     ljmp toint0
+000B                   5     org 000bh
+000B 02005B            6     ljmp tointp
+0013                   7     org 0013h
+0013 0200CE            8     ljmp toint1
+0030                   9     org 0030h
+0030                  10     main:   
+0030 758901           11     mov tmod,#01h  
+0033 D288             12     setb IT0
+0035 D28A             13     setb IT1
+0037 E4               14     clr a
+0038 F540             15             mov 40h,a       ;秒的个位
+003A F541             16             mov 41h,a       ;秒的十位
+003C F542             17             mov 42h,a       ;分的个位
+003E F543             18             mov 43h,a       ;分的个位
+0040 F544             19             mov 44h,a       ;时的个位
+0042 F545             20             mov 45H,a       ;时的个位
+                      21             
+0044 F546             22             mov 46H,a       ;50ms
+0046 D2A9             23             setb et0
+0048 D2A8             24             setb ex0  
+004A D2AA             25             setb ex1 
+004C D2AF             26             setb ea
+004E 758C3C           27             mov th0,#3ch
+0051 758AB0           28             mov tl0,#0b0h
+0054 C28C             29             CLR TR0
+                      30     
+0056 1200D8           31     Xianshi: LCALL DISPLY ;显示
+0059 80FB             32             SJMP Xianshi
+                      33     
+005B                  34     tointp:
+005B C0D0             35             PUSH PSW
+005D C0E0             36             PUSH ACC
+005F 758C3C           37             MOV TH0,#3CH ;0011 1100
+0062 758AB0           38             MOV TL0,#0B0H ;1011 0000
+0065 0546             39             INC 46H                 
+0067 E546             40             MOV A,46H;0100 0110
+                      41     
+0069 B4145A           42             CJNE A,#20,RETURN ;IF 1S 20：0010 0000   ；50ms满20次为1s
+006C 754600           43             MOV 46H,#00H    
+006F 7401             44             MOV A,#01H
+0071 2540             45             ADD A,40H
+0073 F540             46             MOV 40H,A                           ;秒的个位数进一
+                      47     
+0075 B40A4E           48             CJNE A,#10,RETURN;      IF JINWEI
+0078 754000           49             MOV 40H,#00H
+007B E541             50             MOV A,41H
+007D 2401             51             ADD A,#01H
+007F F541             52             MOV 41H,A                          ;秒的个位满10，秒的十位进一
+                      53     
+0081 B40642           54             CJNE A,#06H,RETURN      ;IF 1MINUTE
+0084 754100           55             MOV 41H,#00H
+0087 E542             56             MOV A,42H
+0089 2401             57             ADD A,#01H
+A51 MACRO ASSEMBLER  TASK_55                                                              05/01/2020 14:19:42 PAGE     2
+
+008B F542             58             MOV 42H,A                         
+                      59             
+008D B40A36           60             CJNE A,#10,RETURN       ;IF JINWEI
+0090 754200           61             MOV 42H,#00H
+0093 E543             62             MOV A,43H
+0095 2401             63             ADD A,#01H
+0097 F543             64             MOV 43H,A
+                      65     
+0099 B4062A           66             CJNE A,#06H,RETURN      ;IF 1HOUR
+009C 754300           67             MOV 43H,#00H
+009F E544             68             MOV A,44H
+00A1 2401             69             ADD A,#01H
+00A3 F544             70             MOV 44H,A
+                      71     
+00A5 E545             72             MOV A,45H       ;JUDGE IF OVER
+00A7 B4020E           73             CJNE A,#2,NEXT
+00AA E544             74             MOV A,44H
+00AC B40409           75             CJNE A,#4,NEXT
+00AF 754400           76             MOV 44H,#0
+00B2 754500           77             MOV 45H,#0
+00B5 0200C6           78             LJMP RETURN     ;时比较特殊，因为时已经是最高位了，再进一的时候要判断先前是否为24，
+                             如果是24则进一时清零，不是24跳转至NEXT
+                      79     
+00B8 E544             80     NEXT:   MOV A,44H
+00BA B40A09           81             CJNE A,#10,RETURN       ;IF 10 HOURS
+00BD 754400           82             MOV 44H,#00H
+00C0 E545             83             MOV A,45H
+00C2 2401             84             ADD A,#01H
+00C4 F545             85             MOV 45H,A
+                      86     
+00C6 D0E0             87     RETURN: POP ACC
+00C8 D0D0             88             POP PSW 
+00CA 32               89             RETI
+                      90     
+00CB B28C             91     toint0: CPL TR0
+00CD 32               92             RETI
+00CE                  93     toint1:
+00CE D0E0             94             POP ACC
+00D0 D0E0             95             POP ACC
+00D2 E4               96             CLR A
+00D3 C0E0             97             PUSH ACC
+00D5 C0E0             98             PUSH ACC
+00D7 32               99             RETI
+                     100     
+00D8 7940            101     DISPLY: MOV R1,#40H
+00DA 7EDF            102             MOV R6,#0DFH
+00DC 7D07            103             MOV R5,#7
+00DE 900104          104             MOV DPTR,#TB
+00E1 DD01            105     LOOP3:  DJNZ R5,LOOP2
+00E3 22              106             RET
+00E4 E7              107     LOOP2:  MOV A,@R1
+00E5 93              108             MOVC A,@A+DPTR
+00E6 758000          109             MOV P0,#0
+00E9 D2A6            110             SETB P2.6
+00EB F580            111             MOV P0,A
+00ED C2A6            112             CLR P2.6
+00EF 09              113             INC R1
+00F0 D2A7            114             SETB P2.7
+00F2 8E80            115             MOV P0,R6
+00F4 C2A7            116             CLR P2.7
+00F6 EE              117             MOV A,R6
+00F7 03              118             RR A
+00F8 FE              119             MOV R6,A
+00F9 1200FE          120             LCALL DELAY1S 
+00FC 80E3            121             SJMP LOOP3
+00FE                 122     DELAY1S:
+A51 MACRO ASSEMBLER  TASK_55                                                              05/01/2020 14:19:42 PAGE     3
+
+00FE 7B20            123     MOV     R3,#20H
+0100 00              124     LOOP1:  NOP
+0101 DBFD            125             DJNZ    R3,LOOP1
+0103 22              126             RET     
+                     127     
+0104 3F065B4F        128     TB:DB  3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
+0108 666D7D07                
+010C 7F6F                    
+                     129     end
+A51 MACRO ASSEMBLER  TASK_55                                                              05/01/2020 14:19:42 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+DELAY1S. . . . . .  C ADDR   00FEH   A   
+DISPLY . . . . . .  C ADDR   00D8H   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+LOOP1. . . . . . .  C ADDR   0100H   A   
+LOOP2. . . . . . .  C ADDR   00E4H   A   
+LOOP3. . . . . . .  C ADDR   00E1H   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+NEXT . . . . . . .  C ADDR   00B8H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+RETURN . . . . . .  C ADDR   00C6H   A   
+TB . . . . . . . .  C ADDR   0104H   A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TOINT0 . . . . . .  C ADDR   00CBH   A   
+TOINT1 . . . . . .  C ADDR   00CEH   A   
+TOINTP . . . . . .  C ADDR   005BH   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+XIANSHI. . . . . .  C ADDR   0056H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,181 @@
+A51 MACRO ASSEMBLER  TASK_5                                                               04/26/2020 11:33:54 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.07
+OBJECT MODULE PLACED IN task_5.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE task_5.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     org 0000h
+0000 020030            2     ljmp main
+                       3     
+0030                   4     org 0030h
+0030                   5     main:
+0030 75815F            6             mov sp, #5fh
+0033 900200            7             mov dptr, #tab
+0036 78FE              8             mov r0,#0feh
+0038 7B07              9             MOV R3,#07H
+003A 7C00             10             mov R4,#00h
+                      11     
+003C                  12     loop:   
+003C E590             13             MOV A,P1
+003E 1200C0           14             LCALL delay
+0041 30E010           15             JNB ACC.0,KB2
+0044 020047           16             lJMP KB0        
+                      17             
+0047                  18     KB0:    
+0047 120064           19             lcall WORK0
+004A                  20     GB0:
+                      21             
+004A E590             22             MOV A,P1
+004C 1200C0           23             LCALL delay
+004F 30E002           24             JNB ACC.0,KB2
+0052 80F3             25             SJMP KB0
+                      26     
+0054                  27     KB2: 
+0054 0B               28             INC R3
+0055 12006C           29             LCALL WORK2
+                      30     
+0058                  31     GB2:
+0058 E590             32             MOV A,P1
+005A 1200C0           33             LCALL delay
+005D 30E0F8           34             JNB ACC.0,GB2
+0060 0C               35             INC R4
+0061 020047           36             LJMP KB0
+                      37     
+0064                  38     WORK0:
+0064 EC               39             mov a,R4
+0065 F9               40             mov r1,a
+0066 7A08             41             mov r2,#08h
+0068 120070           42             lcall show01
+006B 22               43             ret
+                      44     
+006C                  45     WORK2:
+                      46             
+006C 12009A           47             lcall show02
+006F 22               48             ret
+                      49             
+0070                  50     show01:
+0070 C0E0             51             push acc
+0072 C2A6             52             clr p2.6
+0074 C2A7             53             clr p2.7
+0076 74FE             54             mov a,#0feh
+                      55     
+                      56             
+0078                  57     show1:
+0078 F580             58             mov p0,a
+A51 MACRO ASSEMBLER  TASK_5                                                               04/26/2020 11:33:54 PAGE     2
+
+007A D2A7             59             setb p2.7
+007C 00               60             nop
+007D C2A7             61             clr p2.7
+                      62             
+                      63     
+007F 00               64             nop
+0080 00               65             nop
+0081 C0E0             66             push acc
+                      67     
+0083 E9               68             mov a, r1               
+0084 93               69             movc a, @a+dptr
+                      70             
+0085 F580             71             MOV P0,A
+                      72             
+0087 D2A6             73             setb p2.6
+0089 00               74             nop
+008A C2A6             75             clr p2.6
+                      76             
+008C 00               77             nop
+008D 00               78             nop
+008E D0E0             79             pop acc
+                      80     
+0090 09               81             inc r1
+0091 23               82             rl a 
+                      83     
+0092 1200C0           84             lcall delay
+0095 DAE1             85             djnz r2, show1
+0097 D0E0             86             pop acc
+0099 22               87             ret     
+009A                  88     show02:
+009A C0E0             89             push acc
+009C C2A7             90             clr p2.7
+009E C2A6             91             clr p2.6
+00A0 747F             92             mov a, #7fh
+00A2                  93     show2:
+00A2 F580             94             mov p0, a       
+00A4 D2A7             95             setb p2.7
+00A6 00               96             nop
+00A7 C2A7             97             clr p2.7
+                      98     
+00A9 00               99             nop
+00AA 00              100             nop
+00AB C0E0            101             push acc
+00AD EB              102             mov a, r3               
+00AE 93              103             movc a, @a+dptr
+00AF F580            104             mov p0, a
+00B1 D2A6            105             setb p2.6
+00B3 00              106             nop
+00B4 C2A6            107             clr p2.6
+00B6 00              108             nop
+00B7 00              109             nop
+00B8 D0E0            110             pop acc
+                     111     
+00BA 1200C0          112             lcall delay
+00BD D0E0            113             pop acc
+00BF 22              114             ret     
+00C0                 115     delay:
+00C0 C006            116             push 06h
+00C2 C007            117             push 07h
+00C4 7E01            118             mov r6, #01h
+00C6                 119     delay1:
+00C6 7F00            120             mov r7, #00h
+00C8 DFFE            121             djnz r7, $
+00CA DEFA            122             djnz r6, delay1
+00CC D007            123             pop 07h
+00CE D006            124             pop 06h
+A51 MACRO ASSEMBLER  TASK_5                                                               04/26/2020 11:33:54 PAGE     3
+
+00D0 22              125             ret
+                     126     
+0200                 127     org 0200h
+0200 067F3F7D        128     tab: db 06h,7fh,3fh,7dh,06h,4fh,4fh,66h,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
+0204 064F4F66                
+0208 065B4F66                
+020C 6D7D077F                
+0210 6F                      
+                     129             
+                     130     end
+A51 MACRO ASSEMBLER  TASK_5                                                               04/26/2020 11:33:54 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+DELAY. . . . . . .  C ADDR   00C0H   A   
+DELAY1 . . . . . .  C ADDR   00C6H   A   
+GB0. . . . . . . .  C ADDR   004AH   A   
+GB2. . . . . . . .  C ADDR   0058H   A   
+KB0. . . . . . . .  C ADDR   0047H   A   
+KB2. . . . . . . .  C ADDR   0054H   A   
+LOOP . . . . . . .  C ADDR   003CH   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+SHOW01 . . . . . .  C ADDR   0070H   A   
+SHOW02 . . . . . .  C ADDR   009AH   A   
+SHOW1. . . . . . .  C ADDR   0078H   A   
+SHOW2. . . . . . .  C ADDR   00A2H   A   
+SP . . . . . . . .  D ADDR   0081H   A   
+TAB. . . . . . . .  C ADDR   0200H   A   
+WORK0. . . . . . .  C ADDR   0064H   A   
+WORK2. . . . . . .  C ADDR   006CH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
