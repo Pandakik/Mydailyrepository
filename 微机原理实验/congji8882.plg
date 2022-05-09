@@ -1,0 +1,14 @@
+<html>
+<body>
+<pre>
+<h1>礦ision2 Build Log</h1>
+<h2>Project:</h2>
+F:\潘宗勇PANZONGYONG\课程课程课程课程课程\大二下下下下下\2微机\keil\TASK_202058.uv2
+Project File Date:  06/11/2020
+
+<h2>Output:</h2>
+Build target 'Target 1'
+linking...
+Program Size: data=8.0 xdata=0 code=495
+creating hex file from "..\实验\zhuji888"...
+"..\实验\zhuji888" - 0 Error(s), 0 Warning(s).
